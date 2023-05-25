@@ -1,7 +1,6 @@
 const ImageElementCreator = require("image-element-creator");
 
 module.exports = async (node, graph) => {
-  const configuration = graph.sceneContainer.dataset;
   const imageElementCreator = ImageElementCreator({
     origin: configuration.serverOrigin
   });

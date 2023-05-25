@@ -1,11 +1,11 @@
 module.exports = ({ origin }) => {
-  const cache = {
-    googleImages: {}
+  const googleImages = {
+    cache: {}
   };
 
   return {
     googleImagesSearchToImageElement: async ({ query }) => {
-      const cache = cache.googleImages;
+      const { cache } = googleImages;
 
       if (query in cache) {
         return cache[query];
@@ -20,7 +20,14 @@ module.exports = ({ origin }) => {
       const searchResponse = await fetch(
         `${origin}/google-images/search?${urlSearchParams}`
       );
+
+      if (searchResponse.status !== 200) {
+        console.error({ searchResponse });
+        return undefined;
+      }
+
       const searchResponseJson = await searchResponse.json();
+      console.log({ searchResponseJson });
 
       const {
         items: [
