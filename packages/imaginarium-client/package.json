@@ -1,0 +1,9 @@
+{
+  "name": "imaginarium-client",
+  "scripts": {
+    "start": "/Applications/Nodes.app/Contents/MacOS/Nodes"
+  },
+  "dependencies": {
+    "image-element-creator": "file:packages/image-element-creator"
+  }
+}
