@@ -21,3 +21,4 @@ GoogleImagesSearchRoute.register(fastify);
 MidjourneyGenerateImageRoute.register(fastify);
 
 fastify.listen({ port: fastify.config.PORT })
+console.log(`Server listening on port ${fastify.config.PORT}`)
