@@ -4,5 +4,6 @@
         "module": "node16",
         "moduleResolution": "node16",
         "target": "es2020"
-    }
+    },
+    "exclude": ["node_modules"]
 }
