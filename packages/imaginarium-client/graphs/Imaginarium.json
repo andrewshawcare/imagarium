@@ -4,34 +4,11 @@
   "name": "Imaginarium",
   "nodes": [
     {
-      "id": "DOt-GJLql",
-      "name": "JSON List Asset Selector",
-      "x": 16,
-      "y": 128,
-      "templateName": "JSON List Asset Selector",
-      "params": [
-        {
-          "name": "Item List",
-          "value": "assets/methods.json"
-        },
-        {
-          "name": "Item",
-          "public": true,
-          "value": "Methods"
-        },
-        {
-          "name": "Enabled",
-          "public": true,
-          "value": true
-        }
-      ]
-    },
-    {
       "id": "AXAUYiczZ",
-      "name": "JSON List Asset Selector",
+      "name": "2. JSON List Asset Selector",
       "x": -53,
       "y": 94,
-      "templateName": "JSON List Asset Selector",
+      "templateName": "2. JSON List Asset Selector",
       "params": [
         {
           "name": "Item List",
@@ -41,52 +18,6 @@
           "name": "Item",
           "public": true,
           "value": "Vincent Van Gogh"
-        },
-        {
-          "name": "Enabled",
-          "public": true,
-          "value": true
-        }
-      ]
-    },
-    {
-      "id": "HgkfyUnj1",
-      "name": "JSON List Asset Selector",
-      "x": 85,
-      "y": 162,
-      "templateName": "JSON List Asset Selector",
-      "params": [
-        {
-          "name": "Item List",
-          "value": "assets/movements.json"
-        },
-        {
-          "name": "Item",
-          "public": true,
-          "value": "Movements"
-        },
-        {
-          "name": "Enabled",
-          "public": true,
-          "value": true
-        }
-      ]
-    },
-    {
-      "id": "kWgV5Tjjb",
-      "name": "JSON List Asset Selector",
-      "x": 154,
-      "y": 196,
-      "templateName": "JSON List Asset Selector",
-      "params": [
-        {
-          "name": "Item List",
-          "value": "assets/styles.json"
-        },
-        {
-          "name": "Item",
-          "public": true,
-          "value": "Styles"
         },
         {
           "name": "Enabled",
@@ -119,21 +50,21 @@
         {
           "name": "Method",
           "source": {
-            "id": "DOt-GJLql",
+            "id": "xsb2qexmy",
             "port": "Output"
           }
         },
         {
           "name": "Movement",
           "source": {
-            "id": "HgkfyUnj1",
+            "id": "R3XreUdMf",
             "port": "Output"
           }
         },
         {
           "name": "Style",
           "source": {
-            "id": "kWgV5Tjjb",
+            "id": "dRoXdG9wM",
             "port": "Output"
           }
         }
@@ -141,7 +72,7 @@
     },
     {
       "id": "Hpzrsg3nL",
-      "name": "Subject",
+      "name": "1. Subject",
       "x": -120,
       "y": 60,
       "templateName": "Custom",
@@ -155,7 +86,7 @@
     },
     {
       "id": "oxHu6hx1h",
-      "name": "Midjourney Image Generator",
+      "name": "4. Midjourney Image Generator",
       "x": -98,
       "y": 399,
       "templateName": "Custom",
@@ -175,7 +106,7 @@
     },
     {
       "id": "hwNUAZu8y",
-      "name": "DALL·E Image Generator",
+      "name": "3. DALL·E Image Generator",
       "x": -116,
       "y": 440,
       "templateName": "Custom",
@@ -190,6 +121,75 @@
         {
           "name": "DALL·E: Generate Image",
           "public": true
+        }
+      ]
+    },
+    {
+      "id": "xsb2qexmy",
+      "name": "2. JSON List Asset Selector",
+      "x": 15,
+      "y": 125,
+      "templateName": "2. JSON List Asset Selector",
+      "params": [
+        {
+          "name": "Item List",
+          "value": "assets/methods.json"
+        },
+        {
+          "name": "Item",
+          "public": true,
+          "value": "Methods"
+        },
+        {
+          "name": "Enabled",
+          "public": true,
+          "value": true
+        }
+      ]
+    },
+    {
+      "id": "R3XreUdMf",
+      "name": "2. JSON List Asset Selector",
+      "x": 82,
+      "y": 158,
+      "templateName": "2. JSON List Asset Selector",
+      "params": [
+        {
+          "name": "Item List",
+          "value": "assets/movements.json"
+        },
+        {
+          "name": "Item",
+          "public": true,
+          "value": "Movements"
+        },
+        {
+          "name": "Enabled",
+          "public": true,
+          "value": true
+        }
+      ]
+    },
+    {
+      "id": "dRoXdG9wM",
+      "name": "2. JSON List Asset Selector",
+      "x": 150,
+      "y": 192,
+      "templateName": "2. JSON List Asset Selector",
+      "params": [
+        {
+          "name": "Item List",
+          "value": "assets/styles.json"
+        },
+        {
+          "name": "Item",
+          "public": true,
+          "value": "Styles"
+        },
+        {
+          "name": "Enabled",
+          "public": true,
+          "value": true
         }
       ]
     }
