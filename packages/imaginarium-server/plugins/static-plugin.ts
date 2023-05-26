@@ -8,7 +8,8 @@ const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 export default {
     async register(fastify: FastifyInstance): Promise<FastifyInstance> {
         fastify.register(fastifyStatic, {
-            root: path.join(__dirname, '..', 'static')
+            root: path.join(__dirname, '..', 'static'),
+            prefix: '/static'
         });
         return fastify;
     }

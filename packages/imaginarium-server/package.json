@@ -5,7 +5,7 @@
   "scripts": {
     "build": "tsc",
     "start": "node index.js",
-    "develop": "nodemon --ext ts,json --exec npm run build start"
+    "develop": "nodemon --ext ts,json --exec 'npm run build && npm run start'"
   },
   "dependencies": {
     "ajv": "8.12.0",
