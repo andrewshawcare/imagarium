@@ -82,7 +82,7 @@ function register(fastify: FastifyInstance) {
             config: {
                 rateLimit: {
                     max: 5,
-                    timeWindow: 1000 * 60 * 5,
+                    timeWindow: 1000 * 60,
                     keyGenerator: () => 0
                 } as const satisfies RateLimitOptions
             },
