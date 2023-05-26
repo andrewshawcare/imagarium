@@ -3,6 +3,7 @@ import { JsonSchemaToTsProvider } from "@fastify/type-provider-json-schema-to-ts
 import { FastifyInstance } from "fastify";
 import Ajv from "ajv"
 import { Midjourney } from "midjourney";
+import { RateLimitOptions } from "@fastify/rate-limit";
 
 const ajv = new Ajv.default()
 
@@ -72,6 +73,13 @@ function register(fastify: FastifyInstance) {
     fastify
         .withTypeProvider<JsonSchemaToTsProvider>()
         .get('/midjourney/generate-image', {
+            config: {
+                rateLimit: {
+                    max: 6,
+                    timeWindow: 1000 * 60 * 60 * 24,
+                    keyGenerator: () => 0
+                } as const satisfies RateLimitOptions
+            },
             schema: {
                 querystring: generateImageRequestSchema,
                 response: {

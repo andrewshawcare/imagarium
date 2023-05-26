@@ -1,7 +1,9 @@
 import { FromSchema, JSONSchema } from "json-schema-to-ts";
 import { JsonSchemaToTsProvider } from "@fastify/type-provider-json-schema-to-ts";
 import { FastifyInstance } from "fastify";
-import Ajv from "ajv"
+import { StatusCodes } from "http-status-codes";
+import { RateLimitOptions } from "@fastify/rate-limit"
+import Ajv from "ajv";
 
 const ajv = new Ajv.default()
 
@@ -49,6 +51,8 @@ const searchResponseSchema = {
 type SearchResponse = FromSchema<typeof searchResponseSchema>;
 const searchResponseValidator = ajv.compile<SearchResponse>(searchResponseSchema)
 
+class TooManyRequestsError extends Error { }
+
 class GoogleImagesService {
     private readonly apiKey: string;
     private readonly programmableSearchEngineId: string;
@@ -78,14 +82,19 @@ class GoogleImagesService {
             searchType: "image"
         });
 
-        return fetch(`${this.origin}?${urlSearchParams}`)
-            .then(response => response.json() as Promise<unknown>)
-            .then((searchResponse): SearchResponse => {
-                if (!searchResponseValidator(searchResponse)) {
-                    throw new Error(JSON.stringify(searchResponseValidator.errors))
-                }
-                return searchResponse;
-            });
+        const searchResponse = await fetch(`${this.origin}?${urlSearchParams}`);
+
+        if (searchResponse.status !== 200) {
+            throw new TooManyRequestsError()
+        }
+
+        const searchResponseJson: unknown = await searchResponse.json()
+
+        if (!searchResponseValidator(searchResponseJson)) {
+            throw new Error(JSON.stringify(searchResponseValidator.errors))
+        }
+
+        return searchResponseJson;
     }
 }
 
@@ -103,18 +112,34 @@ function register(fastify: FastifyInstance) {
     fastify
         .withTypeProvider<JsonSchemaToTsProvider>()
         .get('/google-images/search', {
+            config: {
+                rateLimit: {
+                    max: 4,
+                    timeWindow: 1000 * 60 * 60,
+                    keyGenerator: () => 0
+                } as const satisfies RateLimitOptions
+            },
             schema: {
                 querystring: searchRequestSchema,
                 response: {
-                    200: searchResponseSchema
+                    [StatusCodes.OK]: searchResponseSchema
                 }
             } as const,
             handler: async (request, reply) => {
                 const { query, resultCount, safetyLevel } = request.query;
 
-                const searchResponse = await googleImagesService.search({ query, resultCount, safetyLevel })
+                let searchResponse;
+                try {
+                    searchResponse = await googleImagesService.search({ query, resultCount, safetyLevel })
+                } catch (error) {
+                    console.error(error)
+                    if (error instanceof TooManyRequestsError) {
+                        reply.status(StatusCodes.TOO_MANY_REQUESTS).send();
+                    }
+                    throw error;
+                }
 
-                reply.status(200).send(searchResponse);
+                reply.status(StatusCodes.OK).send(searchResponse);
             }
         })
 }

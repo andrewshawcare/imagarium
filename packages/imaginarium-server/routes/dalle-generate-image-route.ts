@@ -2,6 +2,7 @@ import { FromSchema, JSONSchema } from "json-schema-to-ts";
 import { JsonSchemaToTsProvider } from "@fastify/type-provider-json-schema-to-ts";
 import { FastifyInstance } from "fastify";
 import Ajv from "ajv"
+import { RateLimitOptions } from "@fastify/rate-limit";
 
 const ajv = new Ajv.default()
 
@@ -78,6 +79,13 @@ function register(fastify: FastifyInstance) {
     fastify
         .withTypeProvider<JsonSchemaToTsProvider>()
         .get('/dalle/generate-image', {
+            config: {
+                rateLimit: {
+                    max: 5,
+                    timeWindow: 1000 * 60 * 5,
+                    keyGenerator: () => 0
+                } as const satisfies RateLimitOptions
+            },
             schema: {
                 querystring: generateImageRequestSchema,
                 response: {
