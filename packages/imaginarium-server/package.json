@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "build": "tsc",
+    "prestart": "tsc",
     "start": "node index.js",
     "develop": "nodemon --ext ts,json --exec npm start"
   },
