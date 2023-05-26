@@ -20,5 +20,9 @@ DalleGenerateImageRoute.register(fastify);
 GoogleImagesSearchRoute.register(fastify);
 MidjourneyGenerateImageRoute.register(fastify);
 
+fastify.get('/health', {}, (request, reply) => {
+    reply.status(200).send();
+})
+
 fastify.listen({ port: fastify.config.PORT })
 console.log(`Server listening on port ${fastify.config.PORT}`)
