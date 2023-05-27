@@ -4,6 +4,7 @@
     "packages/*"
   ],
   "scripts": {
+    "copy-client-to-server": "rm -rf ./packages/imaginarium-server/static && cp -R ./packages/imaginarium-client/dist ./packages/imaginarium-server/static",
     "start-server": "npm start --workspace='imaginarium-server'",
     "start-client": "npm start --workspace='imaginarium-client'",
     "start": "concurrently 'npm:start-server' 'npm:start-client'"

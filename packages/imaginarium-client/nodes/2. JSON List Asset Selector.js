@@ -49,12 +49,25 @@ module.exports = async (node, graph) => {
 
     node.comment = item;
 
-    node.commentImage =
-      typeof item === "string" && item !== itemList[0]
-        ? await imageElementCreator.googleImagesSearchToImageElement({
-            query: item
-          })
-        : undefined;
+    if (typeof item !== 'string' || item === '') {
+      node.commentImage = undefined;
+    } else {
+      try {
+        node.commentImage = await imageElementCreator.googleImagesSearchToImageElement({
+          query: item
+        })
+      } catch (error) {
+        const canvasElement = document.createElement("canvas");
+        const context = canvasElement.getContext("2d");
+        context.font = "20px sans-serif";
+        context.fillStyle = "#FFFFFF"
+        context.fillText(error, 10, 20)
+        const canvasImageData = canvasElement.toDataURL();
+        const imageElement = new Image(300, 150);
+        imageElement.setAttribute("src", canvasImageData)
+        node.commentImage = imageElement;
+      }
+    }
   }
 
   function extractTitleFromAssetPath({ assetPath }) {

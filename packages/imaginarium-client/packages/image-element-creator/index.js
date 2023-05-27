@@ -22,8 +22,9 @@ module.exports = ({ origin }) => {
       );
 
       if (searchResponse.status !== 200) {
-        console.error({ searchResponse });
-        return undefined;
+        throw new Error(
+          `${searchResponse.status}: ${searchResponse.statusText}`
+        );
       }
 
       const searchResponseJson = await searchResponse.json();
