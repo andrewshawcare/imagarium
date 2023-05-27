@@ -86,7 +86,7 @@
     },
     {
       "id": "oxHu6hx1h",
-      "name": "4. Midjourney Image Generator",
+      "name": "3. Midjourney Image Generator",
       "x": -98,
       "y": 399,
       "templateName": "Custom",
@@ -106,7 +106,7 @@
     },
     {
       "id": "hwNUAZu8y",
-      "name": "3. DALL·E Image Generator",
+      "name": "4. DALL·E Image Generator",
       "x": -116,
       "y": 439,
       "templateName": "Custom",

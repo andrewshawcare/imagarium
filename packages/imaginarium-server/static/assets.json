@@ -1,8 +1,1 @@
-[
-  "artists.json",
-  "methods.json",
-  "movements.json",
-  "styles.json",
-  "logo-midjourney.png",
-  "logo-openai.png"
-]
+["artists.json","methods.json","movements.json","styles.json"]

@@ -7,9 +7,9 @@ module.exports = (node, graph) => {
 
   const imageContainerElement = document.createElement("div");
   imageContainerElement.setAttribute("id", "dalle");
-  
+
   const placeholderImageElement = new Image(512, 512);
-  placeholderImageElement.setAttribute("src", "assets/logo-openai.png")
+  placeholderImageElement.setAttribute("src", "assets/logo-openai.png");
 
   async function generateImageAndRenderCanvas() {
     const prompt = promptInput.value;
@@ -42,27 +42,28 @@ module.exports = (node, graph) => {
     </style>
     `;
 
-    const generatedImageElement = await imageElementCreator.dalleImageGenerationToImageElement({
-      prompt: prompt,
-      width: 512,
-      height: 512
-    });
+    const generatedImageElement =
+      await imageElementCreator.dalleImageGenerationToImageElement({
+        prompt: prompt,
+        width: 512,
+        height: 512
+      });
 
-    imageContainerElement.innerHTML = '';
+    imageContainerElement.innerHTML = "";
     imageContainerElement.appendChild(generatedImageElement);
 
     node.comment = prompt;
   }
 
   node.onReady = () => {
-    imageContainerElement.innerHTML = '';
+    imageContainerElement.innerHTML = "";
     imageContainerElement.appendChild(placeholderImageElement);
-    
+
     if (!graph.sceneContainer.querySelector(`#${imageContainerElement.id}`)) {
       graph.sceneContainer.appendChild(imageContainerElement);
     }
-  }
-  
+  };
+
   const promptInput = node.in("Prompt");
   const generateImageInput = node.in(
     "DALL·E: Generate Image",

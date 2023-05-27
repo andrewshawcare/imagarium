@@ -3,6 +3,63 @@ module.exports = ({ origin }) => {
     cache: {}
   };
 
+  var computePixelRatio = () => {
+    const context = document.createElement("canvas").getContext("2d");
+    const devicePixelRatio = window.devicePixelRatio || 1;
+    const backingStorePixelRatio =
+      context.webkitBackingStorePixelRatio ||
+      context.mozBackingStorePixelRatio ||
+      context.msBackingStorePixelRatio ||
+      context.oBackingStorePixelRatio ||
+      context.backingStorePixelRatio ||
+      1;
+
+    return devicePixelRatio / backingStorePixelRatio;
+  };
+
+  const createHiDPICanvas = (width, height) => {
+    const pixelRatio = computePixelRatio();
+
+    const canvas = document.createElement("canvas");
+
+    canvas.width = width * pixelRatio;
+    canvas.height = height * pixelRatio;
+
+    canvas.style.width = width + "px";
+    canvas.style.height = height + "px";
+
+    const context = canvas.getContext("2d");
+    context.setTransform(
+      pixelRatio, // horizontalScaling
+      0, // verticalSkewing
+      0, // horizontalSkewing
+      pixelRatio, // verticalScaling
+      0, // horizontalTranslation
+      0 // verticalTransation
+    );
+
+    return canvas;
+  };
+
+  const generateErrorMessageImage = ({ response, width, height }) => {
+    const canvasElement = createHiDPICanvas(width, height);
+    const context = canvasElement.getContext("2d");
+    context.font = "24px sans-serif";
+    context.fillStyle = "#ffffff";
+    context.textAlign = "center";
+    context.textBaseline = "middle";
+    context.fillText(
+      `${response.status}: ${response.statusText}`,
+      width / 2,
+      height / 2,
+      width
+    );
+    const canvasImageData = canvasElement.toDataURL();
+    const imageElement = new Image(width, height);
+    imageElement.setAttribute("src", canvasImageData);
+    return imageElement;
+  };
+
   return {
     googleImagesSearchToImageElement: async ({ query }) => {
       const { cache } = googleImages;
@@ -22,13 +79,14 @@ module.exports = ({ origin }) => {
       );
 
       if (searchResponse.status !== 200) {
-        throw new Error(
-          `${searchResponse.status}: ${searchResponse.statusText}`
-        );
+        return generateErrorMessageImage({
+          response: searchResponse,
+          width: 300,
+          height: 150
+        });
       }
 
       const searchResponseJson = await searchResponse.json();
-      console.log({ searchResponseJson });
 
       const {
         items: [
@@ -54,11 +112,21 @@ module.exports = ({ origin }) => {
         height,
         variations: 1
       });
+      const imageGenerationResponse = await fetch(
+        `${origin}/dalle/generate-image?${urlSearchParams}`
+      );
+
+      if (imageGenerationResponse.status !== 200) {
+        return generateErrorMessageImage({
+          response: imageGenerationResponse,
+          width: width,
+          height: height
+        });
+      }
+
       const {
         data: [{ url }]
-      } = await (
-        await fetch(`${origin}/dalle/generate-image?${urlSearchParams}`)
-      ).json();
+      } = await imageGenerationResponse.json();
 
       const imageElement = new Image(width, height);
       imageElement.setAttribute("alt", prompt);
@@ -72,9 +140,19 @@ module.exports = ({ origin }) => {
       height
     }) => {
       const urlSearchParams = new URLSearchParams({ prompt });
-      const { uri } = await (
-        await fetch(`${origin}/midjourney/generate-image?${urlSearchParams}`)
-      ).json();
+      const imageGenerationResponse = await fetch(
+        `${origin}/midjourney/generate-image?${urlSearchParams}`
+      );
+
+      if (imageGenerationResponse.status !== 200) {
+        return generateErrorMessageImage({
+          response: imageGenerationResponse,
+          width: width,
+          height: height
+        });
+      }
+
+      const { uri } = await imageGenerationResponse.json();
 
       const imageElement = new Image(width, height);
       imageElement.setAttribute("alt", prompt);

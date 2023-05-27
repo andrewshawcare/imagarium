@@ -1,5 +1,8 @@
 {
   "name": "imaginarium-client",
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "start": "/Applications/Nodes.app/Contents/MacOS/Nodes"
   },

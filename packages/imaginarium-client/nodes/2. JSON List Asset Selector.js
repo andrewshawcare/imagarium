@@ -52,21 +52,9 @@ module.exports = async (node, graph) => {
     if (typeof item !== 'string' || item === '') {
       node.commentImage = undefined;
     } else {
-      try {
-        node.commentImage = await imageElementCreator.googleImagesSearchToImageElement({
-          query: item
-        })
-      } catch (error) {
-        const canvasElement = document.createElement("canvas");
-        const context = canvasElement.getContext("2d");
-        context.font = "20px sans-serif";
-        context.fillStyle = "#FFFFFF"
-        context.fillText(error, 10, 20)
-        const canvasImageData = canvasElement.toDataURL();
-        const imageElement = new Image(300, 150);
-        imageElement.setAttribute("src", canvasImageData)
-        node.commentImage = imageElement;
-      }
+      node.commentImage = await imageElementCreator.googleImagesSearchToImageElement({
+        query: item
+      })
     }
   }
 
@@ -79,7 +67,8 @@ module.exports = async (node, graph) => {
 
   const itemListAssetPathInput = node.in("Item List", "", {
     type: "asset",
-    connectable: false
+    connectable: false,
+    filter: '.json'
   });
   itemListAssetPathInput.onChange = async (
     newItemListAssetPath,
